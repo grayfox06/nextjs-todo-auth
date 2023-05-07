@@ -13,17 +13,4 @@ router.patch('/:id/completed', todoController.completeTodo);
 router.patch('/:id/uncompleted', todoController.uncompleteTodo);
 router.delete('/:id', todoController.deleteTodo);
 
-/////////
-
-// router
-//   .route('/')
-//   .get(userController.getAllUsers)
-//   .post(userController.createUser);
-
-// router
-//   .route('/:id')
-//   .get(userController.getUser)
-//   .patch(userController.updateUser)
-//   .delete(userController.deleteUser);
-
 module.exports = router;
