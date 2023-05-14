@@ -61,11 +61,29 @@ exports.login = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, req, res);
 });
 
+// exports.logout = catchAsync(async (req, res, next) => {
+//   // Get the JWT from the request headers
+//   const token = req.headers.authorization.split(' ')[1];
+
+//   // Verify the JWT and extract the user ID
+//   const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//   const userId = decoded.userId;
+
+//   // Update the user document in the database to invalidate the JWT
+//   await User.updateOne({ _id: userId }, { $set: { token: null } });
+
+//   // Send a success response
+//   res.status(200).send('Logout successful');
+//   // res.status(200).json({ status: 'success' });
+// });
+
 exports.logout = (req, res, next) => {
+  delete req.headers.authorization;
   res.cookie('jwt', null, {
     expires: new Date(Date.now() - 10 * 1000),
     httpOnly: true,
   });
+
   res.status(200).json({ status: 'success' });
 };
 
@@ -83,8 +101,10 @@ exports.protect = catchAsync(async (req, res, next) => {
     token = req.cookies.jwt;
   }
 
+  console.log(req.headers.authorization);
+
   if (!token) return next(new Error('Please log in to get access.', 401));
-  console.log(token);
+
   // 2. Verifying token
   const decoded = await jwt.verify(token, process.env.JWT_SECRET);
 

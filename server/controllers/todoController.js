@@ -2,8 +2,8 @@ const Todo = require('../models/todoModel');
 const catchAsync = require('../utils/catchAsync');
 
 exports.getTodos = catchAsync(async (req, res, next) => {
-  const todos = await Todo.find({ UserId: req.userId }).populate('user');
-  console.log(req.user);
+  const todos = await Todo.find({ user: req.user.id }).populate('user');
+
   res.json(todos);
 });
 
@@ -13,7 +13,7 @@ exports.createTodo = catchAsync(async (req, res, next) => {
   const todo = new Todo({
     title,
     completed: false,
-    UserId: req.userId,
+    user: req.user.id,
   });
   await todo.save();
 
